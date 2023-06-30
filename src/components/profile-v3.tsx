@@ -1,7 +1,7 @@
 
 import React from "react";
 
-import Log from "../lib/log";
+import Debug from "../context/debug";
 
 
 type FormData = {
@@ -11,12 +11,14 @@ type FormData = {
 };
 
 let renderCount = 0;
-const ProfileV2 = (props: any) => {
-  const [formData, setFormData] = Log.useState<FormData>({
+const ProfileV3 = (props: any) => {
+  const debug = Debug.useDebug({});
+
+  const [formData, setFormData] = debug.useState<FormData>({
     name: '',
     email: '',
     phone: ''
-  }, 'Log Form Data');
+  }, 'Debug: Form Data');
 
   const handleForm: React.FormEventHandler<HTMLFormElement> = (evt: React.FormEvent<HTMLFormElement>) => {
     if(evt?.cancelable)
@@ -59,4 +61,4 @@ const ProfileV2 = (props: any) => {
   );
 };
 
-export default ProfileV2;
+export default ProfileV3;

@@ -1,11 +1,11 @@
 
 import React from "react";
 
-import Debug from "../lib/debug";
+import Log from "../lib/log";
 
 let renderCount = 0;
 const ProfileV1 = (props: any) => {
-  const [name, setName] = Debug.useState<string>('', 'name');
+  const [name, setName] = Log.useState<string>('', 'name');
   const [email, setEmail] = React.useState<string>();
   const [phone, setPhone] = React.useState<string>();
 
@@ -26,7 +26,7 @@ const ProfileV1 = (props: any) => {
   };
 
   renderCount++;
-  console.log(`Profile render count: ${renderCount}`);
+  console.log(`---ProfileV1 render count: ${renderCount}---`);
   return (
     <form onSubmit={handleVoid}>
       <label>Name:</label> <input type="text" name="name" value={name} onChange={handleNameChange} /><br />
