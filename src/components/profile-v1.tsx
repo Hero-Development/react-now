@@ -5,7 +5,7 @@ import Log from "../lib/log";
 
 let renderCount = 0;
 const ProfileV1 = (props: any) => {
-  const [name, setName] = Log.useState<string>('', 'name');
+  const [name, setName] = Log.useState<string>('');
   const [email, setEmail] = React.useState<string>();
   const [phone, setPhone] = React.useState<string>();
 

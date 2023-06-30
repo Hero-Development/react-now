@@ -9,11 +9,24 @@ import Debug from './context/debug';
 import './App.css';
 
 function App() {
-
   const [tabId, setTab] = React.useState<number>(1);
 
   const handleTab = (id: number) => {
     setTab(id);
+  };
+
+  const renderDebugControls = () => {
+    if(tabId === 3){
+      return (
+        <>
+          <button>Pause</button>
+          <button>Next</button>
+        </>
+      );
+    }
+    else{
+      return null;
+    }
   };
 
   const renderProfile = () => {
@@ -32,7 +45,7 @@ function App() {
   return (
     <Debug.Provider value={{}}>
     <div>
-      <header>Header</header>
+      <header>{renderDebugControls()}</header>
       <hr />
       <main>
         <ul id="tabs">

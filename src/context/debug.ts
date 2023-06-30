@@ -1,49 +1,83 @@
 
 import React from 'react';
 import {
+  DebugMode,
   UseStateOutput,
   UseStateInput,
-  UseDebugInput,
-  UseDebugOutput
+  UseDebugOutput,
 } from '../types';
+
+type Task = () => void;
 
 export const DebugContext = React.createContext<unknown>(null);
 
-let stateId = 1;
-const useDebug = (defaultVal: UseDebugInput): UseDebugOutput => {
+const useDebug = (): UseDebugOutput => {
+  const [mode, setMode] = React.useState<DebugMode>(DebugMode.PAUSE);
+  const [state, setState] = React.useState<unknown>({});
+  const [tasks, setTasks] = React.useState<Task[]>([]);
 
+  const handleNext = () => {};
 
-  const useState = <T>(defaultVal: T, name?: string): UseStateOutput<T> => {
+  const handlePlay = () => {
+    for(let i = 0; i < tasks.length; ++i){
+      tasks[i]();
+    }
+    setTasks([]);
+  };
+
+  const handleStop = () => {};
+
+  const useState = <T>(defaultVal: T, name: string): UseStateOutput<T> => {
     const [curVal, setVal] = React.useState(defaultVal);
   
-    let myStateId = name ? name : stateId++;
+    //let myStateId = name ? name : stateId++;
     const setter = (cbOrVal: UseStateInput<T>) => {
-      console.log(`Queue state[${myStateId}]...`);
+      console.log(`Queue state[${name}]...`);
   
-      setVal(() => {
-        let nextVal: T;
-        if(typeof cbOrVal === 'function')
-          nextVal = (cbOrVal as any)(curVal);
-        else
-          nextVal = cbOrVal;
-  
-        console.log(`...update state[${myStateId}] = `+ JSON.stringify(nextVal));
-        return nextVal;
+      setTasks((curTasks) => {
+        const addTask = () => {
+          let nextVal: T;
+          if(typeof cbOrVal === 'function')
+            nextVal = (cbOrVal as any)(curVal);
+          else
+            nextVal = cbOrVal;
+    
+          console.log(`...update state[${name}] = `+ JSON.stringify(nextVal));
+          setVal(nextVal);
+          setState((curState: T) => {
+            return {
+              ...curState,
+              [name]: nextVal
+            }
+          });
+        };
+
+        return [...curTasks, addTask];
       });
     };
   
     return [curVal, setter];
   };
 
-  const tools = {
-    useState
+  const output = {
+    handleNext,
+    handlePlay,
+    handleStop,
+    useState,
+
+    mode,
+    state,
+    taskCount: tasks.length,
   };
-  return tools;
+
+  return output;
 };
 
-export default {
+const Debug = {
   Consumer: DebugContext.Consumer,
   Provider: DebugContext.Provider,
   displayName: DebugContext.displayName,
   useDebug
 };
+
+export default Debug;

@@ -4,11 +4,12 @@ import React from "react";
 import { UseStateOutput, UseStateInput } from "../types";
 
 let stateId = 1;
-const useState = <T>(defaultVal: T, name?: string): UseStateOutput<T> => {
+const useState = <T>(defaultVal: T): UseStateOutput<T> => {
   const [curVal, setVal] = React.useState(defaultVal);
 
-  let myStateId = name ? name : stateId++;
-  const setter = (cbOrVal: UseStateInput<T>, caller?: string) => {
+  //let myStateId = name ? name : stateId++;
+  let myStateId = stateId++;
+  const setter = (cbOrVal: UseStateInput<T>) => {
     console.log(`Queue state[${myStateId}]...`);
 
     setVal(() => {
@@ -26,6 +27,8 @@ const useState = <T>(defaultVal: T, name?: string): UseStateOutput<T> => {
   return [curVal, setter];
 };
 
-export default {
+const Log = {
   useState
 };
+
+export default Log;

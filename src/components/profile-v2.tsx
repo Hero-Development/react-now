@@ -16,7 +16,7 @@ const ProfileV2 = (props: any) => {
     name: '',
     email: '',
     phone: ''
-  }, 'Log Form Data');
+  });
 
   const handleForm: React.FormEventHandler<HTMLFormElement> = (evt: React.FormEvent<HTMLFormElement>) => {
     if(evt?.cancelable)

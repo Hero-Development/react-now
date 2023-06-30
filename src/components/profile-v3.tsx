@@ -12,7 +12,7 @@ type FormData = {
 
 let renderCount = 0;
 const ProfileV3 = (props: any) => {
-  const debug = Debug.useDebug({});
+  const debug = Debug.useDebug();
 
   const [formData, setFormData] = debug.useState<FormData>({
     name: '',
@@ -24,13 +24,9 @@ const ProfileV3 = (props: any) => {
     if(evt?.cancelable)
       evt.preventDefault();
 
-    // bad example
-    const newData: FormData = formData;
-
-    // good example
-    // const newData: FormData = {
-    //   ...formData
-    // };
+    const newData: FormData = {
+      ...formData
+    };
 
     const form = evt.target as HTMLFormElement;
     for(let i = 0; i < form.length; ++i){
@@ -42,22 +38,27 @@ const ProfileV3 = (props: any) => {
           case 'email':
           case 'phone':
             newData[input.name] = input.value;
-            setFormData(newData);
             break;
         }
       }
     }
+
+    setFormData(newData);
   };
 
   renderCount++;
   console.log(`ProfileV2 render count: ${renderCount}`);
   return (
+    <>
     <form onSubmit={handleForm}>
       <label>Name:</label> <input type="text" name="name" defaultValue={formData.name} /><br />
       <label>Email:</label> <input type="text" name="email" defaultValue={formData.email} /><br />
       <label>Phone:</label> <input type="text" name="phone" defaultValue={formData.phone} /><br />
       <input type="submit" value="Update" />
     </form>
+    <hr />
+    <div></div>
+    </>
   );
 };
 
