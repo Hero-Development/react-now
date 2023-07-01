@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useContext} from 'react';
 import ProfileV1 from './components/profile-v1';
 import ProfileV2 from './components/profile-v2';
 import ProfileV3 from './components/profile-v3';
@@ -7,9 +7,12 @@ import ProfileV3 from './components/profile-v3';
 import Debug from './context/debug';
 
 import './App.css';
+import {UseDebugOutput} from './types';
 
-function App() {
+
+const Page = (props: any) => {
   const [tabId, setTab] = React.useState<number>(1);
+  const debug = useContext<UseDebugOutput>(Debug.Context);
 
   const handleTab = (id: number) => {
     setTab(id);
@@ -19,8 +22,8 @@ function App() {
     if(tabId === 3){
       return (
         <>
-          <button>Pause</button>
-          <button>Next</button>
+          <button onClick={debug.handlePlay}>Play</button>
+          <button onClick={debug.handleNext}>Next</button>
         </>
       );
     }
@@ -43,7 +46,6 @@ function App() {
   };
 
   return (
-    <Debug.Provider value={{}}>
     <div>
       <header>{renderDebugControls()}</header>
       <hr />
@@ -60,7 +62,17 @@ function App() {
       <hr />
       <footer>Footer</footer>
     </div>
-    </Debug.Provider>
+  );
+};
+
+
+function App() {
+  const debug = Debug.useDebug();
+
+  return (
+    <Debug.Context.Provider value={debug}>
+      <Page />
+    </Debug.Context.Provider>
   );
 }
 

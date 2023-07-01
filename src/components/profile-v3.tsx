@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {useContext} from "react";
 
 import Debug from "../context/debug";
 
@@ -12,7 +12,7 @@ type FormData = {
 
 let renderCount = 0;
 const ProfileV3 = (props: any) => {
-  const debug = Debug.useDebug();
+  const debug = useContext(Debug.Context);
 
   const [formData, setFormData] = debug.useState<FormData>({
     name: '',
@@ -47,7 +47,7 @@ const ProfileV3 = (props: any) => {
   };
 
   renderCount++;
-  console.log(`ProfileV2 render count: ${renderCount}`);
+  console.log(`ProfileV3 render count: ${renderCount}`);
   return (
     <>
     <form onSubmit={handleForm}>
@@ -57,7 +57,13 @@ const ProfileV3 = (props: any) => {
       <input type="submit" value="Update" />
     </form>
     <hr />
-    <div></div>
+    <div>
+      <pre>{JSON.stringify({
+        mode: debug.mode,
+        state: debug.state,
+        taskCount: debug.taskCount
+      }, null, 2)}</pre>
+    </div>
     </>
   );
 };

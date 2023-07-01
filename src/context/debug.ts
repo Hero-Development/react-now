@@ -9,23 +9,36 @@ import {
 
 type Task = () => void;
 
-export const DebugContext = React.createContext<unknown>(null);
+export const DebugContext = React.createContext<UseDebugOutput>(undefined as any);
 
 const useDebug = (): UseDebugOutput => {
   const [mode, setMode] = React.useState<DebugMode>(DebugMode.PAUSE);
   const [state, setState] = React.useState<unknown>({});
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
-  const handleNext = () => {};
+  const handleNext = () => {
+    console.log( `handleNext: ${tasks.length}` );
 
-  const handlePlay = () => {
-    for(let i = 0; i < tasks.length; ++i){
-      tasks[i]();
+    if(tasks?.length){
+      tasks[0]();
+      setTasks(tasks.slice(1));
     }
-    setTasks([]);
   };
 
-  const handleStop = () => {};
+  const handlePlay = () => {
+    console.log( `handlePlay: ${tasks.length}` );
+
+    if(tasks?.length){
+      for(let i = 0; i < tasks.length; ++i){
+        tasks[i]();
+      }
+      setTasks([]);
+    }
+  };
+
+  const handleStop = () => {
+    console.log( 'handleStop' );
+  };
 
   const useState = <T>(defaultVal: T, name: string): UseStateOutput<T> => {
     const [curVal, setVal] = React.useState(defaultVal);
@@ -74,9 +87,7 @@ const useDebug = (): UseDebugOutput => {
 };
 
 const Debug = {
-  Consumer: DebugContext.Consumer,
-  Provider: DebugContext.Provider,
-  displayName: DebugContext.displayName,
+  Context: DebugContext,
   useDebug
 };
 
